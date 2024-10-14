@@ -1,6 +1,7 @@
 package com.spring.security.Controller;
 
 import com.spring.security.Entity.UserCred;
+import com.spring.security.Service.JwtSecurity;
 import com.spring.security.Service.UserCredService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,8 @@ public class UserCredController {
     private UserCredService userCredService;
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private JwtSecurity jwtSecurity;
 
     @PostMapping("/addCredentials")
     public ResponseEntity<UserCred> addCredentials(@RequestBody UserCred u){
@@ -28,7 +31,19 @@ public class UserCredController {
     public String getToken(@RequestBody UserCred userCred){
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userCred.getUsername(), userCred.getPassword()));
         if(authentication.isAuthenticated()){
-            return "userCredService.generateToken(userCred.getUsername())";
+            return jwtSecurity.generateToken(userCred.getUsername());
         }return null;
     }
+
+    @GetMapping("/validate/token")
+    public String validateToken(@RequestParam("token") String token){
+       jwtSecurity.validateToken(token);
+       return  "token is valid";
+    }
+
+    @GetMapping("/generateToken/{username}")
+    public String generateToken(@PathVariable("username") String username){
+        return jwtSecurity.generateToken(username);
+    }
+
 }

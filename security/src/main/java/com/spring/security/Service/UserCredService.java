@@ -18,6 +18,4 @@ public class UserCredService {
         u.setPassword(passwordEncoder.encode(u.getPassword()));
         return userCredDao.saveAndFlush(u);
     }
-
-
 }
