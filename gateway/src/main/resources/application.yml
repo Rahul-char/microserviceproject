@@ -21,3 +21,13 @@ spring:
           uri: http://localhost:9092
           predicates:
             - Path=/ustemps/**
+        - id: security
+          uri: lb://security
+          predicates:
+            - Path=/userCred/**
+
+      routes[0]:
+        filters[0]: AuthenticationFilter
+
+      routes[1]:
+        filters[0]: AuthenticationFilter

@@ -36,14 +36,9 @@ public class UserCredController {
     }
 
     @GetMapping("/validate/token")
-    public String validateToken(@RequestParam("token") String token){
+    public boolean validateToken(@RequestParam("token") String token){
        jwtSecurity.validateToken(token);
-       return  "token is valid";
-    }
-
-    @GetMapping("/generateToken/{username}")
-    public String generateToken(@PathVariable("username") String username){
-        return jwtSecurity.generateToken(username);
+       return true;
     }
 
 }
